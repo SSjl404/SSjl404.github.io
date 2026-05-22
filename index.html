@@ -302,6 +302,7 @@ body {
     <a href="#sec-derivative">求导公式</a>
     <a href="#sec-integral">积分公式</a>
     <a href="#sec-int-methods">积分方法与技巧</a>
+    <a href="#sec-improper">无穷积分敛散性</a>
     <a href="#sec-theorem">常考定理</a>
     <div class="sub">
       <a href="#t-clamp">夹逼准则</a>
@@ -315,6 +316,16 @@ body {
       <a href="#t-taylor">泰勒中值定理</a>
       <a href="#t-imvt">积分中值定理</a>
       <a href="#t-nl">牛顿-莱布尼茨公式</a>
+      <a href="#t-chebyshev">切比雪夫不等式</a>
+    </div>
+    <a href="#sec-epsilon" style="margin-top:12px;border-top:1px solid rgba(255,255,255,.1);padding-top:12px;">极限与连续 ε 体系</a>
+    <div class="sub">
+      <a href="#t-eps-n">ε-N 准则</a>
+      <a href="#t-eps-d">ε-δ 准则</a>
+      <a href="#t-eps-cont">连续 ε-δ 定义</a>
+      <a href="#t-uniform">一致连续</a>
+      <a href="#t-cauchy-seq">柯西收敛准则</a>
+      <a href="#t-heine">归结原则</a>
     </div>
     <a href="#sec-linear" style="margin-top:12px;border-top:1px solid rgba(255,255,255,.1);padding-top:12px;">线性代数</a>
     <div class="sub">
@@ -647,19 +658,19 @@ body {
         <div class="method-row">
           <span class="m-label">第二类换元</span>
           <span>三角代换处理根式：$\sqrt{a^2-x^2}$ 设 $x=a\sin t$；$\sqrt{a^2+x^2}$ 设 $x=a\tan t$；$\sqrt{x^2-a^2}$ 设 $x=a\sec t$<br>
-          <span class="m-example">例：$\displaystyle\int\frac{1}{\sqrt{1-x^2}}\,dx\;(x=\sin t)=\int dt = \arcsin x+C$</span></span>
+          <span class="m-example">例：$\displaystyle\int\frac{1}{\sqrt{1-x^2}}dx$，令 $x=\sin t$，则 $dx=\cos t\,dt$，$\sqrt{1-x^2}=\cos t$，原式 $=\int\frac{\cos t}{\cos t}dt=\int dt = t+C = \arcsin x+C$</span></span>
         </div>
 
         <div class="method-row">
           <span class="m-label">分部积分法</span>
           <span>$\displaystyle\int u\,dv = uv - \int v\,du$，"反对幂指三"越靠前越设为 $u$<br>
-          <span class="m-example">例：$\displaystyle\int x e^x\,dx$（幂 $x$ 为 $u$，$e^x$ 为 $dv$）$= x e^x - e^x + C$</span></span>
+          <span class="m-example">例：$\displaystyle\int x e^x\,dx$，设 $u=x,\;dv=e^xdx$，则 $du=dx,\;v=e^x$，由分部公式 $\int u\,dv=uv-\int v\,du$ 得 $=x e^x-\int e^x\,dx = x e^x - e^x + C$</span></span>
         </div>
 
         <div class="method-row">
           <span class="m-label">循环型分部</span>
           <span>分部后出现同类型积分，移项解方程求得<br>
-          <span class="m-example">例：$\displaystyle\int e^x\sin x\,dx$ 两次分部得 $e^x(\sin x-\cos x)-\int e^x\sin x\,dx$，解得原积分 $=\frac12 e^x(\sin x-\cos x)+C$</span></span>
+          <span class="m-example">例：$\displaystyle\int e^x\sin x\,dx$，第一次分部：$u=e^x,dv=\sin x\,dx$ $\Rightarrow$ 原式 $=-e^x\cos x+\int e^x\cos x\,dx$；第二次分部：$u=e^x,dv=\cos x\,dx$ $\Rightarrow$ $\int e^x\cos x\,dx=e^x\sin x-\int e^x\sin x\,dx$，代入得 $=-e^x\cos x+e^x\sin x-\int e^x\sin x\,dx$，移项解得 $=\frac12 e^x(\sin x-\cos x)+C$</span></span>
         </div>
 
         <div class="method-row">
@@ -678,6 +689,69 @@ body {
           <span class="m-label">组合积分法</span>
           <span>联立求解含待求积分的方程组，适合 $\displaystyle\int\frac{A\sin x+B\cos x}{C\sin x+D\cos x}\,dx$ 型<br>
           <span class="m-example">例：$\displaystyle\int\frac{\sin x}{\sin x+\cos x}\,dx$，设 $I=\int\frac{\sin x}{\sin x+\cos x}dx,\;J=\int\frac{\cos x}{\sin x+\cos x}dx$，由 $I+J=x,\;J-I=\ln|\sin x+\cos x|$ 解得 $I=\frac12\bigl(x-\ln|\sin x+\cos x|\bigr)+C$</span></span>
+        </div>
+
+        <div class="method-row">
+          <span class="m-label">万能代换</span>
+          <span>$t=\tan\frac{x}{2}$，则 $\sin x=\frac{2t}{1+t^2},\;\cos x=\frac{1-t^2}{1+t^2},\;dx=\frac{2}{1+t^2}dt$，将三角有理式化为 $t$ 的有理函数<br>
+          <span class="m-example">例：$\displaystyle\int\frac{1}{1+\sin x}\,dx\;(t=\tan\frac x2)=\int\frac{2}{(1+t)^2}dt=-\frac{2}{1+t}+C=-\frac{2}{1+\tan\frac x2}+C$</span></span>
+        </div>
+
+        <div class="method-row">
+          <span class="m-label">待定系数法</span>
+          <span>对 $\displaystyle\int\frac{p\sin x+q\cos x}{a\sin x+b\cos x}dx$，设分子 $\equiv\alpha$ (分母) $+\beta$ (分母)$'$，解得 $\alpha,\beta$ 后积分 $=\alpha x+\beta\ln|a\sin x+b\cos x|+C$<br>
+          <span class="m-example">例：$\displaystyle\int\frac{2\sin x+3\cos x}{\sin x+2\cos x}dx$，设 $2\sin x+3\cos x=\alpha(\sin x+2\cos x)+\beta(\cos x-2\sin x)=(\alpha-2\beta)\sin x+(2\alpha+\beta)\cos x$，比较系数得 $\begin{cases}\alpha-2\beta=2\\2\alpha+\beta=3\end{cases}\Rightarrow\alpha=\frac85,\;\beta=-\frac15$，故原积分 $=\int\frac{\alpha(\text{分母})+\beta(\text{分母})'}{\text{分母}}dx=\alpha x+\beta\ln|\sin x+2\cos x|+C=\frac85x-\frac15\ln|\sin x+2\cos x|+C$</span></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================ 无穷积分敛散性 ============================ -->
+  <div class="section" id="sec-improper">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="icon">∫∞</span>
+      <h2>无穷积分敛散性判别</h2>
+      <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="method-card">
+        <div class="method-title">判别方法及例题</div>
+
+        <div class="method-row">
+          <span class="m-label">定义法</span>
+          <span>直接计算极限 $\displaystyle\lim_{b\to\infty}\int_a^b f(x)\,dx$（无穷限）或 $\displaystyle\lim_{\varepsilon\to0^+}\int_{a+\varepsilon}^b f(x)\,dx$（瑕点），极限存在则收敛<br>
+          <span class="m-example">例：$\displaystyle\int_1^\infty\frac{1}{x^2}\,dx=\lim_{b\to\infty}\Big[-\frac1x\Big]_1^b=\lim_{b\to\infty}\bigl(1-\frac1b\bigr)=1$，收敛</span></span>
+        </div>
+
+        <div class="method-row">
+          <span class="m-label">比较判别法</span>
+          <span>若 $0\le f(x)\le g(x)$，则 $\int g$ 收敛 $\Rightarrow\int f$ 收敛；$\int f$ 发散 $\Rightarrow\int g$ 发散<br>
+          <span class="m-example">例：$\displaystyle\int_1^\infty\frac{1}{x^2+1}\,dx\le\int_1^\infty\frac{1}{x^2}\,dx$，而 $\int_1^\infty\frac{1}{x^2}dx$ 收敛，故原积分收敛</span></span>
+        </div>
+
+        <div class="method-row">
+          <span class="m-label">极限比较法</span>
+          <span>$\displaystyle\lim_{x\to\infty}\frac{f(x)}{g(x)}=l\;(0<l<\infty)$，则 $\int f$ 与 $\int g$ 同敛散（$x\to0$ 瑕点类似）<br>
+          <span class="m-example">例：$\displaystyle\int_1^\infty\frac{1}{\sqrt{x^3+1}}\,dx$，$\frac{1}{\sqrt{x^3+1}}\sim\frac{1}{x^{3/2}}\;(x\to\infty)$，$p=\frac32>1$，故收敛</span></span>
+        </div>
+
+        <div class="method-row">
+          <span class="m-label">p-积分法</span>
+          <span>$\displaystyle\int_1^\infty\frac{dx}{x^p}\;\begin{cases}p>1\text{ 收敛}\\p\le1\text{ 发散}\end{cases}$，$\displaystyle\int_0^1\frac{dx}{x^p}\;\begin{cases}p<1\text{ 收敛}\\p\ge1\text{ 发散}\end{cases}$，是最常用的比较基准<br>
+          <span class="m-example">例：$\int_1^\infty\frac{dx}{\sqrt[3]{x^2}}$（$p=\frac23<1$）发散；$\int_0^1\frac{dx}{\sqrt[3]{x^2}}$（$p=\frac23<1$）收敛</span></span>
+        </div>
+
+        <div class="method-row">
+          <span class="m-label">狄利克雷判别法</span>
+          <span>$F(A)=\int_a^A f(x)\,dx$ 有界，$g(x)$ 单调且 $\displaystyle\lim_{x\to\infty}g(x)=0$，则 $\int_a^\infty f(x)g(x)\,dx$ 收敛<br>
+          <span class="m-example">例：$\int_1^\infty\frac{\sin x}{x}\,dx$ 收敛（$\int_1^A\sin x\,dx$ 有界，$\frac1x\to0$ 单调递减）</span></span>
+        </div>
+
+        <div class="method-row">
+          <span class="m-label">阿贝尔判别法</span>
+          <span>$\int_a^\infty f(x)\,dx$ 收敛，$g(x)$ 单调有界，则 $\int_a^\infty f(x)g(x)\,dx$ 收敛<br>
+          <span class="m-example">例：$\int_1^\infty\frac{\cos x}{x^2}\,dx$ 收敛（$\int_1^\infty\frac{dx}{x^2}$ 收敛，$\cos x$ 有界）</span></span>
         </div>
 
       </div>
@@ -828,6 +902,101 @@ body {
         </div>
       </div>
 
+      <div class="theorem-card" id="t-chebyshev">
+        <div class="theorem-row">
+          <div class="t-name">十二、切比雪夫积分不等式<span class="difficulty mid">重要</span></div>
+          <div class="t-desc">
+            设 $f(x),g(x)$ 在 $[a,b]$ 上可积且具有相同的单调性（同增或同减），则
+            $$\frac{1}{b-a}\int_a^b f(x)g(x)\,dx \ge \frac{1}{b-a}\int_a^b f(x)\,dx \cdot \frac{1}{b-a}\int_a^b g(x)\,dx$$
+            即 $(b-a)\displaystyle\int_a^b f(x)g(x)\,dx \ge \int_a^b f(x)\,dx \int_a^b g(x)\,dx$。
+            <br>若 $f,g$ 单调性相反，则不等号反向。
+            <br>常用于证明积分不等式与估计积分值。
+          </div>
+          <div class="t-example"><strong>例：</strong>取 $f(x)=x,\;g(x)=x^2$ 均在 $[0,1]$ 上递增，左 $=\int_0^1 x^3dx=\frac14$，右 $=\int_0^1 xdx\cdot\int_0^1 x^2dx=\frac12\cdot\frac13=\frac16$，$\frac14\ge\frac16$ 成立。</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== 极限与连续的 ε 定义体系 ===================== -->
+  <div class="section" id="sec-epsilon">
+    <div class="section-header" onclick="toggleSection(this)">
+      <span class="icon">ε</span>
+      <h2>极限与连续的 ε 定义体系</h2>
+      <span class="toggle">▼</span>
+    </div>
+    <div class="section-body">
+
+  <div class="theorem-card" id="t-eps-n" style="border-top:1px solid #bfdbfe;border-radius:10px;">
+    <div class="theorem-row">
+      <div class="t-name">一、ε-N 准则（数列极限定义）<span class="difficulty high">高频</span></div>
+      <div class="t-desc">
+        $\displaystyle\lim_{n\to\infty}a_n=A\iff\forall\varepsilon>0,\;\exists N\in\mathbb{N}^+,\;n>N\Rightarrow|a_n-A|<\varepsilon$
+      </div>
+      <div class="t-example"><strong>例：</strong>用 $\varepsilon$-$N$ 定义证明 $\displaystyle\lim_{n\to\infty}\frac{n}{n+1}=1$。<br>
+        $\forall\varepsilon>0$，要使 $\bigl|\frac{n}{n+1}-1\bigr|=\frac{1}{n+1}<\varepsilon$，只需 $n>\frac1\varepsilon-1$。取 $N=\bigl\lceil\frac1\varepsilon-1\bigr\rceil$，则当 $n>N$ 时 $\bigl|\frac{n}{n+1}-1\bigr|<\varepsilon$ 成立，故极限为 $1$。</div>
+    </div>
+  </div>
+
+  <div class="theorem-card" id="t-eps-d">
+    <div class="theorem-row">
+      <div class="t-name">二、ε-δ 准则（函数极限定义）<span class="difficulty high">高频</span></div>
+      <div class="t-desc">
+        $\displaystyle\lim_{x\to x_0}f(x)=A\iff\forall\varepsilon>0,\;\exists\delta>0,\;0<|x-x_0|<\delta\Rightarrow|f(x)-A|<\varepsilon$
+      </div>
+      <div class="t-example"><strong>例：</strong>用 $\varepsilon$-$\delta$ 定义证明 $\displaystyle\lim_{x\to2}(3x-1)=5$。<br>
+        $\forall\varepsilon>0$，要使 $|(3x-1)-5|=3|x-2|<\varepsilon$，只需 $|x-2|<\frac\varepsilon3$。取 $\delta=\frac\varepsilon3$，则当 $0<|x-2|<\delta$ 时 $|(3x-1)-5|<\varepsilon$，故极限为 $5$。</div>
+    </div>
+  </div>
+
+  <div class="theorem-card" id="t-eps-cont">
+    <div class="theorem-row">
+      <div class="t-name">三、函数连续的 ε-δ 定义<span class="difficulty high">高频</span></div>
+      <div class="t-desc">
+        $f(x)$ 在 $x_0$ 连续 $\iff\forall\varepsilon>0,\;\exists\delta>0,\;|x-x_0|<\delta\Rightarrow|f(x)-f(x_0)|<\varepsilon$
+      </div>
+      <div class="t-example"><strong>例：</strong>用 $\varepsilon$-$\delta$ 定义证明 $f(x)=x^2$ 在 $x=2$ 处连续。<br>
+        $\forall\varepsilon>0$，$|x^2-4|=|x-2||x+2|$。限制 $|x-2|<1$，则 $1<x<3$，$|x+2|<5$，故 $|x-2||x+2|<5|x-2|$。只需 $|x-2|<\frac\varepsilon5$，取 $\delta=\min\{1,\frac\varepsilon5\}$，则当 $|x-2|<\delta$ 时 $|x^2-4|<\varepsilon$，故 $x^2$ 在 $x=2$ 处连续。</div>
+    </div>
+  </div>
+
+  <div class="theorem-card" id="t-uniform">
+    <div class="theorem-row">
+      <div class="t-name">四、一致连续定义<span class="difficulty mid">重要</span></div>
+      <div class="t-desc">
+        $f(x)$ 在区间 $I$ 上一致连续 $\iff\forall\varepsilon>0,\;\exists\delta>0,\;\forall x_1,x_2\in I,\;|x_1-x_2|<\delta\Rightarrow|f(x_1)-f(x_2)|<\varepsilon$<br>
+        与连续的关键区别：$\delta$ 只依赖于 $\varepsilon$，不依赖于 $x$ 的位置。
+      </div>
+      <div class="t-example"><strong>例：</strong>证明 $f(x)=\sqrt{x}$ 在 $[0,1]$ 上一致连续。<br>
+        $\forall\varepsilon>0$，$\forall x_1,x_2\in[0,1]$，$|\sqrt{x_1}-\sqrt{x_2}|=\frac{|x_1-x_2|}{\sqrt{x_1}+\sqrt{x_2}}\le|x_1-x_2|$。取 $\delta=\varepsilon$，则当 $|x_1-x_2|<\delta$ 时 $|f(x_1)-f(x_2)|<\varepsilon$，故一致连续。</div>
+    </div>
+  </div>
+
+  <div class="theorem-card" id="t-cauchy-seq">
+    <div class="theorem-row">
+      <div class="t-name">五、柯西收敛准则（数列）<span class="difficulty high">高频</span></div>
+      <div class="t-desc">
+        数列 $\{a_n\}$ 收敛 $\iff\forall\varepsilon>0,\;\exists N\in\mathbb{N}^+,\;\forall m,n>N\Rightarrow|a_m-a_n|<\varepsilon$<br>
+        （不需要知道极限值就能判断收敛性）
+      </div>
+      <div class="t-example"><strong>例：</strong>用柯西准则证明 $\{(-1)^n\}$ 发散。<br>
+        取 $\varepsilon_0=1$，对任意 $N$，取 $m=N+1,\;n=N+2$，则 $|a_m-a_n|=|(-1)^{N+1}-(-1)^{N+2}|=2>1$，不满足柯西条件，故发散。</div>
+    </div>
+  </div>
+
+  <div class="theorem-card" id="t-heine">
+    <div class="theorem-row">
+      <div class="t-name">六、归结原则（海涅定理）<span class="difficulty mid">重要</span></div>
+      <div class="t-desc">
+        $\displaystyle\lim_{x\to x_0}f(x)=A\iff$ 对任意数列 $\{x_n\}$ 满足 $x_n\to x_0$（$x_n\neq x_0$）都有 $\displaystyle\lim_{n\to\infty}f(x_n)=A$<br>
+        将函数极限归结为数列极限，常用于证明极限不存在。
+      </div>
+      <div class="t-example"><strong>例：</strong>证明 $\displaystyle\lim_{x\to0}\sin\frac1x$ 不存在。<br>
+        取 $x_n=\frac{1}{n\pi}\to0$，$\sin\frac1{x_n}=\sin n\pi=0\to0$；取 $y_n=\frac{1}{2n\pi+\frac\pi2}\to0$，$\sin\frac1{y_n}=\sin(2n\pi+\frac\pi2)=1\to1$。两子列极限不同，由归结原则知原极限不存在。</div>
+    </div>
+  </div>
+
     </div>
   </div>
 
@@ -900,11 +1069,11 @@ body {
         </div>
         <div class="method-row">
           <span class="m-label">递推法</span>
-          <span>建立 $D_n$ 与 $D_{n-1}, D_{n-2}$ 间的递推关系，适用于三对角等特殊结构<br><span class="m-example">例：$D_n=3D_{n-1}-2D_{n-2}$（$n\ge3$），$D_1=3,D_2=7\Rightarrow D_n=2^{n+1}-1$</span></span>
+          <span>建立 $D_n$ 与 $D_{n-1}, D_{n-2}$ 间的递推关系，适用于三对角等特殊结构<br><span class="m-example">例：$D_n=3D_{n-1}-2D_{n-2}$（$n\ge3$），$D_1=3,\;D_2=7$。特征方程 $r^2-3r+2=0\Rightarrow r=1,2$，通解 $D_n=A\cdot1^n+B\cdot2^n$，代入 $D_1,D_2$ 得 $A+2B=3,\;A+4B=7\Rightarrow A=-1,\;B=2$，故 $D_n=2^{n+1}-1$</span></span>
         </div>
         <div class="method-row">
           <span class="m-label">加边法</span>
-          <span>增加一行一列保持原行列式值不变，将非零元素集中到某行/列后展开<br><span class="m-example">例：$D=\begin{vmatrix}1+a_1&1&\cdots&1\\1&1+a_2&\cdots&1\\\vdots&\vdots&\ddots&\vdots\\1&1&\cdots&1+a_n\end{vmatrix}$，加第 $1$ 行 $\times(-1)$ 到其余行后化三角</span></span>
+          <span>增加一行一列保持原行列式值不变，将非零元素集中到某行/列后展开<br><span class="m-example">例：$D=\begin{vmatrix}1+a_1&1&\cdots&1\\1&1+a_2&\cdots&1\\\vdots&\vdots&\ddots&\vdots\\1&1&\cdots&1+a_n\end{vmatrix}$。<br>① 加边（升阶）：$D=\begin{vmatrix}1&1&1&\cdots&1\\0&1+a_1&1&\cdots&1\\0&1&1+a_2&\cdots&1\\\vdots&\vdots&\vdots&\ddots&\vdots\\0&1&1&\cdots&1+a_n\end{vmatrix}$<br>② 第 $2\sim n+1$ 行减第 $1$ 行：$\begin{vmatrix}1&1&1&\cdots&1\\-1&a_1&0&\cdots&0\\-1&0&a_2&\cdots&0\\\vdots&\vdots&\vdots&\ddots&\vdots\\-1&0&0&\cdots&a_n\end{vmatrix}$<br>③ 第 $i$ 列加 $\frac{1}{a_{i-1}}$ 倍到第 $1$ 列 $(i\ge2)$ 得三角，$\displaystyle D=a_1a_2\cdots a_n\!\left(1+\sum_{i=1}^n\frac1{a_i}\right)$</span></span>
         </div>
         <div class="method-row">
           <span class="m-label">拆项法</span>
@@ -912,11 +1081,11 @@ body {
         </div>
         <div class="method-row">
           <span class="m-label">爪形行列式</span>
-          <span>$\begin{vmatrix}a_0&amp;b_1&amp;b_2&amp;\cdots\\c_1&amp;a_1&amp;0&amp;\cdots\\c_2&amp;0&amp;a_2&amp;\cdots\\\vdots&amp;\vdots&amp;\vdots&amp;\ddots\end{vmatrix}$：第 $i$ 列乘 $-\frac{c_i}{a_i}$ 加到第 $1$ 列（$a_i \neq 0$），化为三角<br><span class="m-example">例：$\begin{vmatrix}1&1&1\\1&2&0\\1&0&3\end{vmatrix}$，第 $2$ 列加 $-2\times$ 第 $3$ 列到第 $1$ 列得三角 $\Rightarrow$ 值 $=1$</span></span>
+          <span>$\begin{vmatrix}a_0&amp;b_1&amp;b_2&amp;\cdots\\c_1&amp;a_1&amp;0&amp;\cdots\\c_2&amp;0&amp;a_2&amp;\cdots\\\vdots&amp;\vdots&amp;\vdots&amp;\ddots\end{vmatrix}$：第 $i$ 列乘 $-\frac{c_i}{a_i}$ 加到第 $1$ 列（$a_i \neq 0$），化为三角<br><span class="m-example">例：$\begin{vmatrix}1&1&1\\1&2&0\\1&0&3\end{vmatrix}$，$R_2-R_1,\;R_3-R_1\Rightarrow\begin{vmatrix}1&1&1\\0&1&-1\\0&-1&2\end{vmatrix}$，按第 $1$ 列展开 $\Rightarrow\begin{vmatrix}1&-1\\-1&2\end{vmatrix}=1\times2-(-1)\times(-1)=1$</span></span>
         </div>
         <div class="method-row">
           <span class="m-label">行和相等</span>
-          <span>各行（列）和相等时，将各列加到第 $1$ 列，提出公因子后化为简单形式<br><span class="m-example">例：$\begin{vmatrix}1&2&3&4\\2&3&4&1\\3&4&1&2\\4&1&2&3\end{vmatrix}$，列和均为 $10$，各列加到第 $1$ 列后提取 $10$，再化为三角 $\Rightarrow$ 值 $=-160$</span></span>
+          <span>各行（列）和相等时，将各列加到第 $1$ 列，提出公因子后化为简单形式<br><span class="m-example">例：$D=\begin{vmatrix}1&2&3&4\\2&3&4&1\\3&4&1&2\\4&1&2&3\end{vmatrix}$，各列加到第 $1$ 列 $\Rightarrow\begin{vmatrix}10&2&3&4\\10&3&4&1\\10&4&1&2\\10&1&2&3\end{vmatrix}=10\begin{vmatrix}1&2&3&4\\1&3&4&1\\1&4&1&2\\1&1&2&3\end{vmatrix}$，$R_2-R_1,\;R_3-R_1,\;R_4-R_1\Rightarrow10\begin{vmatrix}1&2&3&4\\0&1&1&-3\\0&2&-2&-2\\0&-1&-1&-1\end{vmatrix}=10\begin{vmatrix}1&1&-3\\2&-2&-2\\-1&-1&-1\end{vmatrix}$，$R_2-2R_1,\;R_3+R_1\Rightarrow10\begin{vmatrix}1&1&-3\\0&-4&4\\0&0&-4\end{vmatrix}=10\times1\times(-4)\times(-4)=160$</span></span>
         </div>
       </div>
       <div class="example-card">
@@ -1042,13 +1211,13 @@ body {
         </div>
         <div class="method-row">
           <span class="m-label">表示系数</span>
-          <span>求 $\beta = x_1\alpha_1+\cdots+x_r\alpha_r$：解线性方程组 $(\alpha_1,\dots,\alpha_r)x = \beta$<br><span class="m-example">例：$\beta=(1,2,3)$ 由 $\alpha_1=(1,1,0),\alpha_2=(1,0,1),\alpha_3=(0,1,1)$ 表示：解方程组得 $\beta=\alpha_1+2\alpha_2+\alpha_3$</span></span>
+          <span>求 $\beta = x_1\alpha_1+\cdots+x_r\alpha_r$：解线性方程组 $(\alpha_1,\dots,\alpha_r)x = \beta$<br><span class="m-example">例：$\beta=(1,2,3)$ 由 $\alpha_1=(1,1,0),\alpha_2=(1,0,1),\alpha_3=(0,1,1)$ 表示。增广矩阵 $\begin{pmatrix}1&1&0&1\\1&0&1&2\\0&1&1&3\end{pmatrix}\xrightarrow{R_2-R_1}\begin{pmatrix}1&1&0&1\\0&-1&1&1\\0&1&1&3\end{pmatrix}\xrightarrow{R_3+R_2}\begin{pmatrix}1&1&0&1\\0&-1&1&1\\0&0&2&4\end{pmatrix}$，回代得 $x_3=2,\;x_2=1,\;x_1=0$，故 $\beta=\alpha_2+2\alpha_3$</span></span>
         </div>
       </div>
       <div class="example-card">
         <div class="ex-title">例题</div>
         <div class="ex-row"><span class="ex-label">题：</span>判断 $\alpha_1=(1,1,0),\,\alpha_2=(2,-1,1),\,\alpha_3=(0,3,-1)$ 的线性相关性。</div>
-        <div class="ex-row"><span class="ex-label">解：</span>$A=\begin{pmatrix}1&2&0\\1&-1&3\\0&1&-1\end{pmatrix}\xrightarrow{R_2-R_1}\begin{pmatrix}1&2&0\\0&-3&3\\0&1&-1\end{pmatrix}\xrightarrow{R_3+\frac13R_2}\begin{pmatrix}1&2&0\\0&-3&3\\0&0&0\end{pmatrix}$，$r=2<3$，故线性相关。具体地 $2\alpha_1-\alpha_2-\alpha_3=0$。</div>
+        <div class="ex-row"><span class="ex-label">解：</span>$A=\begin{pmatrix}1&2&0\\1&-1&3\\0&1&-1\end{pmatrix}\xrightarrow{R_2-R_1}\begin{pmatrix}1&2&0\\0&-3&3\\0&1&-1\end{pmatrix}\xrightarrow{R_3+\frac13R_2}\begin{pmatrix}1&2&0\\0&-3&3\\0&0&0\end{pmatrix}$，$r=2<3$，故线性相关。由行阶梯形得 $x_1+2x_2=0,\;-3x_2+3x_3=0\Rightarrow x_2=x_3,\;x_1=-2x_3$，取 $x_3=1$ 得 $x_1=-2,x_2=1$，故 $-2\alpha_1+\alpha_2+\alpha_3=0$，即 $2\alpha_1-\alpha_2-\alpha_3=0$。</div>
       </div>
     </div>
   </div>
@@ -1172,7 +1341,7 @@ body {
         </div>
         <div class="method-row">
           <span class="m-label">反求矩阵</span>
-          <span>已知全部特征值与特征向量：$A = P\Lambda P^{-1}$ 构造；已知特征多项式：利用 Cayley-Hamilton 定理 $f(A)=0$<br><span class="m-example">例：已知 $\lambda_1=2,\lambda_2=4$，$\xi_1=(1,-1)^T,\xi_2=(1,1)^T$，则 $P=\begin{pmatrix}1&1\\-1&1\end{pmatrix}$，$A=P\begin{pmatrix}2&0\\0&4\end{pmatrix}P^{-1}=\begin{pmatrix}3&1\\1&3\end{pmatrix}$</span></span>
+          <span>已知全部特征值与特征向量：$A = P\Lambda P^{-1}$ 构造；已知特征多项式：利用 Cayley-Hamilton 定理 $f(A)=0$<br><span class="m-example">例：已知 $\lambda_1=2,\lambda_2=4$，$\xi_1=(1,-1)^T,\xi_2=(1,1)^T$，则 $P=\begin{pmatrix}1&1\\-1&1\end{pmatrix},\;\Lambda=\begin{pmatrix}2&0\\0&4\end{pmatrix}$，$P^{-1}=\frac12\begin{pmatrix}1&-1\\1&1\end{pmatrix}$，$A=P\Lambda P^{-1}=\begin{pmatrix}1&1\\-1&1\end{pmatrix}\begin{pmatrix}2&0\\0&4\end{pmatrix}\cdot\frac12\begin{pmatrix}1&-1\\1&1\end{pmatrix}=\frac12\begin{pmatrix}2&4\\-2&4\end{pmatrix}\begin{pmatrix}1&-1\\1&1\end{pmatrix}=\frac12\begin{pmatrix}6&2\\2&6\end{pmatrix}=\begin{pmatrix}3&1\\1&3\end{pmatrix}$</span></span>
         </div>
         <div class="method-row">
           <span class="m-label">可对角化判定</span>
@@ -1234,7 +1403,7 @@ body {
         </div>
         <div class="method-row">
           <span class="m-label">正交变换法</span>
-          <span>① 求 $A$ 的特征值与特征向量；② 重根特征向量正交化（Schmidt）；③ 单位化得正交阵 $Q$，$x=Qy$ 化标准型 $\sum \lambda_i y_i^2$<br><span class="m-example">例：$A=\begin{pmatrix}2&2\\2&5\end{pmatrix}$，$\lambda=1,6$，正交化单位化得 $Q$，$f=y_1^2+6y_2^2$（参见下方例题）</span></span>
+          <span>① 求 $A$ 的特征值与特征向量；② 重根特征向量正交化（Schmidt）；③ 单位化得正交阵 $Q$，$x=Qy$ 化标准型 $\sum \lambda_i y_i^2$<br><span class="m-example">例：$A=\begin{pmatrix}2&2\\2&5\end{pmatrix}$，$\lambda_1=1$（$\xi_1=(2,-1)^T$），$\lambda_2=6$（$\xi_2=(1,2)^T$），单位化得 $Q=\begin{pmatrix}\frac{2}{\sqrt5}&\frac{1}{\sqrt5}\\-\frac{1}{\sqrt5}&\frac{2}{\sqrt5}\end{pmatrix}$，$x=Qy$ 化 $f=y_1^2+6y_2^2$</span></span>
         </div>
         <div class="method-row">
           <span class="m-label">合同变换法</span>
@@ -1248,7 +1417,7 @@ body {
       <div class="example-card">
         <div class="ex-title">例题</div>
         <div class="ex-row"><span class="ex-label">题：</span>化 $f(x_1,x_2)=2x_1^2+4x_1x_2+5x_2^2$ 为标准型并判断正定性。</div>
-        <div class="ex-row"><span class="ex-label">解：</span>$A=\begin{pmatrix}2&2\\2&5\end{pmatrix}$，$|\lambda E-A|=(\lambda-1)(\lambda-6)=0$，$\lambda_1=1,\;\lambda_2=6$，正交变换化标准型 $f=y_1^2+6y_2^2$。所有特征值 $>0$，故 $f$ <strong>正定</strong>。</div>
+        <div class="ex-row"><span class="ex-label">解：</span>$A=\begin{pmatrix}2&2\\2&5\end{pmatrix}$，$|\lambda E-A|=\begin{vmatrix}\lambda-2&-2\\-2&\lambda-5\end{vmatrix}=(\lambda-1)(\lambda-6)=0$，$\lambda_1=1,\lambda_2=6$。$\lambda_1=1$ 时 $(-1,-2;-2,-4)x=0\Rightarrow\xi_1=(2,-1)^T$；$\lambda_2=6$ 时 $(4,-2;-2,1)x=0\Rightarrow\xi_2=(1,2)^T$。单位化得正交阵 $Q=\begin{pmatrix}\frac{2}{\sqrt5}&\frac{1}{\sqrt5}\\-\frac{1}{\sqrt5}&\frac{2}{\sqrt5}\end{pmatrix}$，正交变换 $x=Qy$ 化标准型 $f=y_1^2+6y_2^2$。特征值全正，故 $f$ <strong>正定</strong>。</div>
       </div>
     </div>
   </div>
